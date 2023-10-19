@@ -20,10 +20,11 @@ namespace QR_AUTH.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private static List<QrModel.Merchant> _qrData = new List<QrModel.Merchant>();
+        private readonly IConfiguration _configuration;
         private static Document Doc = new Document();
         private readonly DocumentBuilder _builder;
 
-        public QrFetchAndGenerating(IHttpClientFactory httpClientFactory)
+        public QrFetchAndGenerating(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
 
@@ -33,6 +34,12 @@ namespace QR_AUTH.Controllers
             }
 
             _builder = new DocumentBuilder(Doc);
+
+            _configuration = configuration;
+
+            IConfigurationRoot root = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables().Build();
         }
 
         private void ClearWordDocument(string fileName)
@@ -78,7 +85,7 @@ namespace QR_AUTH.Controllers
                 foreach (string filePath in files)
                 {
                     System.IO.File.Delete(filePath);
-                    Console.WriteLine($"Удален файл: {filePath}");
+                    // Console.WriteLine($"Удален файл: {filePath}");
                 }
             }
             catch (Exception ex)
@@ -87,11 +94,13 @@ namespace QR_AUTH.Controllers
             }
         }
 
-        private void InsertTextAndImage(string text, string imageFileName, DocumentBuilder builder)
+        private void InsertTextAndImage(string text, string imageFileName, DocumentBuilder builder, string link)
         {
             builder.Writeln(text);
             builder.Writeln("---------------------------------------------------------------------------------");
             builder.InsertImage(imageFileName);
+            builder.InsertBreak(BreakType.LineBreak);
+            builder.Writeln(link);
             builder.InsertBreak(BreakType.SectionBreakNewPage);
         }
 
@@ -101,7 +110,7 @@ namespace QR_AUTH.Controllers
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                var data = await client.GetAsync("https://localhost:7194/qr-list-get");
+                var data = await client.GetAsync(_configuration["QrDataGetLink"]);
                 if (data.IsSuccessStatusCode)
                 {
                     var content = await data.Content.ReadAsStringAsync();
@@ -135,10 +144,10 @@ namespace QR_AUTH.Controllers
                 DeleteFilesInFolder("Assets/WordDosc");
                 foreach (var singleQr in _qrData)
                 {
-                    string fileName = $"Assets/{singleQr.Id}.png";
+                    string fileName = $"Assets/GenerateAllRequest/{singleQr.Id}.png";
                     // Console.WriteLine(fileName);
                     GenerateAndSaveQrCode(singleQr.qr_data, fileName);
-                    InsertTextAndImage(singleQr.Title, fileName, builder: builder);
+                    InsertTextAndImage(singleQr.Title, fileName, builder: builder, link: singleQr.qr_data);
                 }
 
                 string wordFileName = "Assets/WordDosc/qr_codes.docx";
@@ -151,8 +160,8 @@ namespace QR_AUTH.Controllers
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "qr_codes.docx");
                 Response.Headers.Add("Content-Disposition", "attachment; filename=qr_codes.docx");
                 //fileStream.Close();
-                DeleteFilesInFolder("Assets/WordDosc");
                 //DeleteFilesInFolder("Assets/WordDosc");
+                DeleteFilesInFolder("Assets/GenerateAllRequest");
                 return response;
             }
             catch (Exception exception)
@@ -174,7 +183,7 @@ namespace QR_AUTH.Controllers
                 var pointData = _qrData.FirstOrDefault(item => item.Id == data);
                 string tempQrCodeFileName = $"Assets/SelectedRequest/{pointData.Id}.png";
                 GenerateAndSaveQrCode(pointData.qr_data, tempQrCodeFileName);
-                InsertTextAndImage(pointData.Title, tempQrCodeFileName, builder);
+                InsertTextAndImage(pointData.Title, tempQrCodeFileName, builder, link: pointData.qr_data);
             }
 
             string wordFileName = "Assets/WordDosc/qr_codes.docx";
@@ -196,19 +205,11 @@ namespace QR_AUTH.Controllers
             try
             {
                 DeleteFilesInFolder("Assets/OneIdRequest");
-                Console.WriteLine(id);
+                // Console.WriteLine(id);
                 var pointData = _qrData.FirstOrDefault(item => item.Id == id);
                 string tempQrCodeFileName = $"Assets/OneIdRequest/{pointData.Id}.png";
                 GenerateAndSaveQrCode(pointData.qr_data, tempQrCodeFileName);
-                Console.WriteLine(tempQrCodeFileName);
-                // _builder.Writeln(pointData.Title);
-                // _builder.Writeln("---------------------------------------------------------------------------------");
-                // _builder.InsertImage(tempQrCodeFileName);
-                // 
-                // string currentDirectory = Directory.GetCurrentDirectory();
-                // string targetFolder = "Assets/OneIdRequest";
-                // string sourceFilePath = Path.Combine(currentDirectory, tempQrCodeFileName);
-                // string targetFilePath = Path.Combine(targetFolder, tempQrCodeFileName);
+                // Console.WriteLine(tempQrCodeFileName);
                 pointData.QrLink = tempQrCodeFileName;
                 
                 return Ok(pointData);

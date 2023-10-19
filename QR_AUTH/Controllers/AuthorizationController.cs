@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QR_AUTH.Data;
-using QR_AUTH.Models;
-using System;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using QR_AUTH.DTO;
 
 namespace QR_AUTH.Controllers
@@ -21,34 +17,35 @@ namespace QR_AUTH.Controllers
             _dbContext = context;
         }
 
-        private string GenerateApiKey()
-        {
-            using var provider = new RNGCryptoServiceProvider();
-            var bytes = new byte[32];
-            provider.GetBytes(bytes);
-            return Convert.ToBase64String(bytes).Replace("/", "").Replace("+", "").Replace("=", "");
-        }
+        // private string GenerateApiKey()
+        // {
+        //     using var provider = new RNGCryptoServiceProvider();
+        //     var bytes = new byte[32];
+        //     provider.GetBytes(bytes);
+        //     return Convert.ToBase64String(bytes).Replace("/", "").Replace("+", "").Replace("=", "");
+        // }
 
         [HttpPost("login")]
         public async Task<IActionResult> Auth(LoginDTO model)
         {
-            //Console.WriteLine(model.login);
+            // Console.WriteLine(model.login);
+            // Console.WriteLine(model.password);
             try
             {
-                if (model.apiKey != null)
-                {
-                    var userApi = await _dbContext.Auths.FirstOrDefaultAsync(x => x.Key == model.apiKey);
-                    if (userApi != null)
-                    {
-                        return Ok(userApi.Login);
-                    }
-
-                    return Ok(new
-                    {
-                        msg = "Требуется авторизация",
-                        code = 500,
-                    });
-                }
+                // if (model.apiKey != null)
+                // {
+                //     var userApi = await _dbContext.Auths.FirstOrDefaultAsync(x => x.Key == model.apiKey);
+                //     if (userApi != null)
+                //     {
+                //         return Ok(userApi.Login);
+                //     }
+                //
+                //     return Ok(new
+                //     {
+                //         msg = "Требуется авторизация",
+                //         code = 500,
+                //     });
+                // }
 
                 if (model is { login: not null, password: not null })
                 {
@@ -56,22 +53,22 @@ namespace QR_AUTH.Controllers
                         x.Login == model.login && x.Password == model.password);
                     if (user != null)
                     {
-                        var key = GenerateApiKey();
-                        user.Key = key;
-                        await _dbContext.SaveChangesAsync();
+                        // var key = GenerateApiKey();
+                        // user.Key = key;
+                        // await _dbContext.SaveChangesAsync();
 
                         return Ok(new
                         {
                             msg = "Auth OK",
                             code = 200,
-                            data = new { model.login, model.apiKey }
+                            data = new { model.login }
                         });
                     }
 
                     return Ok(new
                     {
                         msg = "Неверный логин или пароль",
-                        code = 500
+                        code = 401
                     });
                 }
             }
