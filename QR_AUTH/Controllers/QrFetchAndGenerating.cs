@@ -227,6 +227,7 @@ namespace QR_AUTH.Controllers
             string wordFileName = "Assets/WordDosc/qr_codes.docx";
             _document.Save();
             //ClearWordDocument(wordFileName);
+            DeleteFilesInFolder("Assets/SelectedRequest");
             return returnFile(wordFileName);
             //var fileStream = System.IO.File.OpenRead(wordFileName);
             //var response = File(fileStream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

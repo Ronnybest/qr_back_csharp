@@ -3,14 +3,17 @@ using Microsoft.Extensions.FileProviders;
 using QR_AUTH.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())  // Устанавливаем базовый путь к проекту
+            .AddJsonFile("appsettings.json")              // Указываем имя файла конфигурации
+            .Build();
 // Add services to the container.
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: myAllowSpecificOrigins, policy =>
     {
-        policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+        policy.WithOrigins(configuration["AllowedFrontUrl"]).AllowAnyHeader().AllowAnyMethod();
     });
 });
 builder.Services.AddControllers();
