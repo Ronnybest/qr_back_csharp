@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\SystemX\\RiderProjects\\QR_AUTH\\QR_AUTH\\QR_AUTH.csproj": {}
+    "C:\\Users\\dmelikhov\\Desktop\\qr\\qr-back\\backend\\qr_back_csharp\\QR_AUTH\\QR_AUTH.csproj": {}
   },
   "projects": {
-    "C:\\Users\\SystemX\\RiderProjects\\QR_AUTH\\QR_AUTH\\QR_AUTH.csproj": {
+    "C:\\Users\\dmelikhov\\Desktop\\qr\\qr-back\\backend\\qr_back_csharp\\QR_AUTH\\QR_AUTH.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SystemX\\RiderProjects\\QR_AUTH\\QR_AUTH\\QR_AUTH.csproj",
+        "projectUniqueName": "C:\\Users\\dmelikhov\\Desktop\\qr\\qr-back\\backend\\qr_back_csharp\\QR_AUTH\\QR_AUTH.csproj",
         "projectName": "QR_AUTH",
-        "projectPath": "C:\\Users\\SystemX\\RiderProjects\\QR_AUTH\\QR_AUTH\\QR_AUTH.csproj",
-        "packagesPath": "C:\\Users\\SystemX\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SystemX\\RiderProjects\\QR_AUTH\\QR_AUTH\\obj\\",
+        "projectPath": "C:\\Users\\dmelikhov\\Desktop\\qr\\qr-back\\backend\\qr_back_csharp\\QR_AUTH\\QR_AUTH.csproj",
+        "packagesPath": "C:\\Users\\dmelikhov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dmelikhov\\Desktop\\qr\\qr-back\\backend\\qr_back_csharp\\QR_AUTH\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\SystemX\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dmelikhov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -42,7 +42,11 @@
           "dependencies": {
             "Aspose.Words": {
               "target": "Package",
-              "version": "[23.9.0, )"
+              "version": "[23.10.0, )"
+            },
+            "DocX": {
+              "target": "Package",
+              "version": "[2.5.0, )"
             },
             "DocumentFormat.OpenXml": {
               "target": "Package",
@@ -58,19 +62,19 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.Office.Interop.Word": {
               "target": "Package",
@@ -78,7 +82,7 @@
             },
             "Net.Codecrete.QrCodeGenerator": {
               "target": "Package",
-              "version": "[2.0.3, )"
+              "version": "[2.0.4, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -98,7 +102,7 @@
             },
             "System.Configuration.ConfigurationManager": {
               "target": "Package",
-              "version": "[6.0.1, )"
+              "version": "[7.0.0, )"
             },
             "System.Runtime.InteropServices": {
               "target": "Package",
@@ -124,7 +128,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.414\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.415\\RuntimeIdentifierGraph.json"
         }
       }
     }
