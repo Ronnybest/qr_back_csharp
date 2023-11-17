@@ -10,6 +10,8 @@ using SkiaSharp;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System;
+
 namespace QR_AUTH.Controllers
 {
     internal class FileStreamDelete : FileStream
@@ -116,9 +118,10 @@ namespace QR_AUTH.Controllers
                 return File(memoryStream.ToArray(), Response.ContentType);
             }
         }
-        private void InsertTextAndImage(string text, string imageFileName, string link)
+        private void InsertTextAndImage(string id,string text, string imageFileName, string link)
         {
             var p = _document.InsertParagraph();
+            p.AppendLine("ID: " + id);
             p.AppendLine("Название: " + text);
             p.AppendLine("---------------------------------------------------------------------------------");
             var image = _document.AddImage(imageFileName);
@@ -146,7 +149,7 @@ namespace QR_AUTH.Controllers
                 {
                     UseProxy = true,
                     Proxy = new WebProxy(proxyUri), // Использует системные настройки прокси Windows
-                    UseDefaultCredentials = true // Использует учетные данные пользователя для прокси, если они настроены в Windows
+                    UseDefaultCredentials = false // Использует учетные данные пользователя для прокси, если они настроены в Windows
                 };
 
                 var client = new HttpClient(handler);
@@ -189,7 +192,7 @@ namespace QR_AUTH.Controllers
                     string fileName = $"{singleQr.Id}.png";
                     // Console.WriteLine(fileName);
                     GenerateAndSaveQrCode(singleQr.qr_data, fileName);
-                    InsertTextAndImage(singleQr.Title, fileName, link: singleQr.qr_data);
+                    InsertTextAndImage(singleQr.Id.ToString(), singleQr.Title, fileName, link: singleQr.qr_data);
                 }
                 _document.Save();
                 string wordFileName = "qr_codes.docx";
@@ -230,7 +233,7 @@ namespace QR_AUTH.Controllers
                 var pointData = _qrData.FirstOrDefault(item => item.Id == data);
                 string tempQrCodeFileName = $"{pointData.Id}.png";
                 GenerateAndSaveQrCode(pointData.qr_data, tempQrCodeFileName);
-                InsertTextAndImage(pointData.Title, tempQrCodeFileName, link: pointData.qr_data);
+                InsertTextAndImage(pointData.Id.ToString(), pointData.Title, tempQrCodeFileName, link: pointData.qr_data);
             }
 
             string wordFileName = "qr_codes.docx";
